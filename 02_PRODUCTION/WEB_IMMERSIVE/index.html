@@ -2,112 +2,44 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>Laet's Danse Studio – Golden Version</title>
+<title>Laet's Danse Studio</title>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@700;900&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg-color: #000;
-    --neon-pink: #ff007f;
-    /* Couleur du verre rosé avec transparence saturée */
-    --glass-pink: linear-gradient(135deg, rgba(255, 0, 127, 0.15), rgba(255, 0, 127, 0.05));
+  :root { 
+    --bg-color: #000; 
+    --neon-pink: #ff007f; 
+    --glass-pink: linear-gradient(135deg, rgba(255, 0, 127, 0.18), rgba(255, 0, 127, 0.05));
   }
-  
   * { margin:0; padding:0; box-sizing:border-box; }
+  body { background: var(--bg-color); height: 1500vh; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
   
-  body { 
-    background: var(--bg-color); 
-    height: 1500vh;
-    overflow-x: hidden;
-    -webkit-font-smoothing: antialiased;
-  }
-  
-  #canvas-container { 
-    position: fixed; top: 0; left: 0; 
-    width: 100vw; height: 100vh; 
-    z-index: 1; background: #000;
-  }
-  
+  #canvas-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; background: #000; }
   #canvas { display: block; width: 100%; height: 100%; }
   
-  #brand-logo {
-    position: absolute;
-    top: 30px; left: 30px;
-    width: 120px; opacity: 0;
-    transition: opacity 1s ease;
-    z-index: 100;
-  }
+  #brand-logo { position: absolute; top: 30px; left: 30px; width: 120px; opacity: 0; transition: opacity 1s; z-index: 100; }
+  #fixed-watermark { position: fixed; bottom: 30px; right: 30px; width: 80px; opacity: 0.6; z-index: 100; pointer-events: none; }
 
-  #fixed-watermark {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    width: 80px;
-    opacity: 0.6;
-    z-index: 100;
-    pointer-events: none;
-  }
-
-  /* --- STYLE GLASS ROSE ULTRA-PREMIUM (Comme image de réf) --- */
   .glass-card {
-    position: absolute;
-    background: var(--glass-pink);
-    backdrop-filter: blur(25px) saturate(180%); 
-    -webkit-backdrop-filter: blur(25px) saturate(180%);
-    border: 1px solid rgba(255, 0, 127, 0.3); /* Bordure rosée marquée */
-    border-radius: 20px; padding: 2.2rem;
-    text-align: center; opacity: 0; pointer-events: none;
-    z-index: 10; width: 420px;
-    /* Ombre rosée subtile et profondeur */
-    box-shadow: 0 15px 35px rgba(255, 0, 127, 0.15), inset 0 0 15px rgba(255, 0, 127, 0.05);
+    position: absolute; background: var(--glass-pink);
+    backdrop-filter: blur(25px) saturate(180%); -webkit-backdrop-filter: blur(25px) saturate(180%);
+    border: 1px solid rgba(255, 0, 127, 0.3); border-radius: 20px; padding: 2.2rem;
+    text-align: center; opacity: 0; pointer-events: none; z-index: 10; width: 420px;
+    box-shadow: 0 15px 35px rgba(255, 0, 127, 0.15);
   }
+  .glass-card h2 { font-family: 'Roboto', sans-serif; font-weight: 900; text-transform: uppercase; font-size: 2rem; color: var(--neon-pink); margin-bottom: 1.2rem; }
+  .glass-card p { font-family: 'Roboto', sans-serif; font-weight: 700; font-size: 1.2rem; color: #fff; line-height: 1.5; }
 
-  .glass-card h2 {
-    font-family: 'Roboto', sans-serif; font-weight: 900;
-    text-transform: uppercase; font-size: 2rem;
-    color: var(--neon-pink); margin-bottom: 1.2rem;
-    text-shadow: 0 0 10px rgba(255, 0, 127, 0.5);
-  }
-
-  .glass-card p {
-    font-family: 'Roboto', sans-serif; font-weight: 700;
-    font-size: 1.2rem; color: #ffffff; line-height: 1.5;
-  }
-
-  /* --- STYLE SPÉCIFIQUE POUR LES AVIS (Indépendantes et Parallaxes) --- */
-  .review-card {
-    position: absolute; 
-    width: 300px; 
-    padding: 1.8rem;
-    z-index: 9; /* Derrière la carte centrale fixe */
-    will-change: transform, opacity; /* Optimisation */
-  }
+  /* Style des avis mobiles */
+  .review-card { position: absolute; width: 300px; padding: 1.8rem; z-index: 9; will-change: transform, opacity; }
   .review-card p { font-size: 1rem !important; }
-
-  /* Positions initiales désaxées pour la parallaxe */
   #rev1 { top: 12%; left: 6%; transform: rotate(-3deg); }
   #rev2 { top: 15%; right: 6%; transform: rotate(4deg); }
   #rev3 { bottom: 18%; left: 8%; transform: rotate(-2deg); }
 
-  /* Carte centrale FIXE et DOMINANTE */
-  #card6 { 
-    top: 50%; left: 50%; 
-    transform: translate(-50%, -50%);
-    width: 480px; 
-    z-index: 15; /* Devant tout, y compris les avis */
-    pointer-events: auto; /* Active au clic dès apparition */
-  }
+  /* Card principale fixe */
+  #card6 { top: 50%; left: 50%; transform: translate(-50%, -50%); width: 480px; z-index: 15; }
+  .cta-button { display: inline-block; padding: 16px 32px; background: var(--neon-pink); color: #fff; text-decoration: none; font-family: 'Roboto', sans-serif; font-weight: 900; border-radius: 50px; text-transform: uppercase; margin-top: 20px; }
 
-  .cta-button {
-    display: inline-block; padding: 16px 32px;
-    background: var(--neon-pink); border: none;
-    color: #fff; text-decoration: none;
-    font-family: 'Roboto', sans-serif; font-weight: 900;
-    border-radius: 50px; text-transform: uppercase;
-    margin-top: 20px;
-    box-shadow: 0 0 15px rgba(255, 0, 127, 0.4);
-  }
-
-  /* Autres cartes standards */
   #card1 { bottom: 8%; left: 50%; margin-left: -210px; } 
   #card2 { top: 12%; left: 5%; } 
   #card3 { top: 12%; right: 5%; } 
@@ -115,34 +47,24 @@
   #card5 { bottom: 12%; left: 5%; } 
 
   @media (max-width: 768px) {
-    .glass-card:not(.review-card) { 
-      width: 92% !important; left: 4% !important;
-      bottom: 8% !important; top: auto !important; margin: 0 !important;
-    }
-    .review-card { display: none; } /* Cachées sur mobile */
-    #brand-logo { width: 90px; top: 15px; left: 15px; }
+    .glass-card:not(.review-card) { width: 92% !important; left: 4% !important; bottom: 8% !important; top: auto !important; margin: 0 !important; }
+    .review-card { display: none; }
   }
 
-  #preloader {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: #000; z-index: 9999; display: flex; align-items: center; justify-content: center;
-  }
+  #preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; display: flex; align-items: center; justify-content: center; }
   #preloader-bar { width: 200px; height: 2px; background: #222; }
   #preloader-fill { height: 100%; width: 0%; background: var(--neon-pink); }
 </style>
 </head>
 <body>
 
-<div id="preloader">
-  <div id="preloader-bar"><div id="preloader-fill"></div></div>
-</div>
+<div id="preloader"><div id="preloader-bar"><div id="preloader-fill"></div></div></div>
 
 <img src="./03_ASSETS/logo.png" id="brand-logo" alt="Logo">
 <img src="./03_ASSETS/LOGO_LDS/logo_lds.png" id="fixed-watermark" alt="LDS">
 
 <div id="canvas-container">
   <canvas id="canvas"></canvas>
-  
   <div class="glass-card" id="card1"><h2>La rencontre</h2><p>Deux âmes, un même rythme.</p></div>
   <div class="glass-card" id="card2"><h2>L'envie</h2><p>Le rêve commence à prendre forme.</p></div>
   <div class="glass-card" id="card3"><h2>La demande</h2><p>Un instant suspendu, une promesse.</p></div>
@@ -194,44 +116,28 @@ function render() {
   const currentIdx = Math.round(sequence.frame);
   const img = images[currentIdx];
   if (!img) return;
-
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
   const canvasRatio = canvas.width / canvas.height;
   const imgRatio = img.width / img.height;
-  
   let dW, dH;
-
   if (window.innerWidth >= 768) {
     if (currentIdx < 60) {
       dH = canvas.height; dW = dH * imgRatio;
     } else {
-      if (canvasRatio > imgRatio) {
-        dW = canvas.width; dH = dW / imgRatio;
-      } else {
-        dH = canvas.height; dW = dH * imgRatio;
-      }
+      if (canvasRatio > imgRatio) { dW = canvas.width; dH = dW / imgRatio; } 
+      else { dH = canvas.height; dW = dH * imgRatio; }
     }
   } else {
-    // Mobile Statique
     if (currentIdx < 60) {
-      if (canvasRatio > imgRatio) {
-        dH = canvas.height; dW = dH * imgRatio;
-      } else {
-        dW = canvas.width; dH = dW / imgRatio;
-      }
+      if (canvasRatio > imgRatio) { dH = canvas.height; dW = dH * imgRatio; } 
+      else { dW = canvas.width; dH = dW / imgRatio; }
     } else {
-      if (canvasRatio > imgRatio) {
-        dW = canvas.width; dH = dW / imgRatio;
-      } else {
-        dH = canvas.height; dW = dH * imgRatio;
-      }
-      if (dW > canvas.width * 1.5) {
-        dW = canvas.width * 1.5; dH = dW / imgRatio;
-      }
+      if (canvasRatio > imgRatio) { dW = canvas.width; dH = dW / imgRatio; } 
+      else { dH = canvas.height; dW = dH * imgRatio; }
+      if (dW > canvas.width * 1.5) { dW = canvas.width * 1.5; dH = dW / imgRatio; }
     }
   }
-
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.drawImage(img, (canvas.width - dW) / 2, (canvas.height - dH) / 2, dW, dH);
   document.getElementById('brand-logo').style.opacity = (currentIdx > 60) ? "1" : "0";
@@ -239,15 +145,12 @@ function render() {
 
 function initScroll() {
   gsap.registerPlugin(ScrollTrigger);
-  
-  // Animation de la séquence d'images
   gsap.to(sequence, {
     frame: totalFrames - 1,
     ease: "none",
     scrollTrigger: { trigger: "body", start: "top top", end: "bottom bottom", scrub: 0.1, onUpdate: render }
   });
 
-  // Timings d'apparition des cartes standards
   const timings = [
     { id: "#card1", s: 65, e: 303 }, { id: "#card2", s: 337, e: 402 },
     { id: "#card3", s: 420, e: 522 }, { id: "#card4", s: 539, e: 618 },
@@ -257,50 +160,32 @@ function initScroll() {
   timings.forEach(t => {
     gsap.timeline({
       scrollTrigger: {
-        trigger: "body", 
-        start: `${(t.s/totalFrames)*100}% top`, 
-        end: `${(t.e/totalFrames)*100}% top`, 
-        scrub: true,
+        trigger: "body", start: `${(t.s/totalFrames)*100}% top`, end: `${(t.e/totalFrames)*100}% top`, scrub: true,
         onToggle: self => document.querySelector(t.id).style.pointerEvents = self.isActive ? 'auto' : 'none'
       }
     }).to(t.id, { opacity: 1, y: 0, duration: 0.3 }).to(t.id, { opacity: 1, duration: 0.4 }).to(t.id, { opacity: 0, y: -20, duration: 0.3 });
   });
 
-  // --- SCÈNE FINALE : Carte Centrale FIXE (Pas de parallaxe) ---
+  // CARD 6 FIXE (Apparition à 82%)
   gsap.timeline({
     scrollTrigger: {
-      trigger: "body",
-      start: "82% top", // Démarrage tardif de la scène finale
-      end: "100% top",
-      scrub: true,
+      trigger: "body", start: "82% top", end: "100% top", scrub: true,
       onToggle: self => document.querySelector("#card6").style.pointerEvents = self.isActive ? 'auto' : 'none'
     }
-  }).fromTo("#card6", { opacity: 0 }, { opacity: 1, duration: 1 })
-    .to("#card6", { opacity: 1 }); // Elle reste fixe à l'écran
+  }).fromTo("#card6", { opacity: 0 }, { opacity: 1, duration: 0.5 });
 
-  // --- PARALLAXE MULTIDIRECTIONNEL INDÉPENDANT DES AVIS ---
+  // AVIS PARALLAXE (Apparition décalée à 85%)
   if (window.innerWidth >= 768) {
-    const parallaxTrigger = {
-      trigger: "body",
-      start: "82% top", // Même démarrage tardif
-      end: "100% top",
-      scrub: 2 // scrub élevé pour effet flotter/désynchronisé
-    };
+    const pTrigger = { trigger: "body", start: "85% top", end: "100% top", scrub: 2.5 };
 
-    // Avis 1 (Julie & Marc) : Diagonale vers le haut
-    gsap.timeline({ scrollTrigger: parallaxTrigger })
-      .fromTo("#rev1", { opacity: 0, y: 150, x: -80 }, { opacity: 1, y: 0, x: 0, duration: 0.8, delay: 0.1 })
-      .to("#rev1", { y: -200, x: -120, ease: "none" }); // Mouvement parallaxe indépendant
+    gsap.timeline({ scrollTrigger: pTrigger })
+      .fromTo("#rev1", { opacity: 0, y: 100, x: -50 }, { opacity: 1, y: -150, x: -100, ease: "none" });
 
-    // Avis 2 (Thomas & Léa) : Diagonale vers le bas et déphasé
-    gsap.timeline({ scrollTrigger: parallaxTrigger })
-      .fromTo("#rev2", { opacity: 0, y: -100, x: 100 }, { opacity: 1, y: 0, x: 0, duration: 0.8, delay: 0.3 })
-      .to("#rev2", { y: 250, x: 180, ease: "none" }); // Vitesse et direction différentes
+    gsap.timeline({ scrollTrigger: pTrigger })
+      .fromTo("#rev2", { opacity: 0, y: -50, x: 50 }, { opacity: 1, y: 180, x: 120, ease: "none" });
 
-    // Avis 3 (Sarah & Kev) : Mouvement vertical prononcé
-    gsap.timeline({ scrollTrigger: parallaxTrigger })
-      .fromTo("#rev3", { opacity: 0, y: 200, x: 50 }, { opacity: 1, y: 0, x: 0, duration: 0.8, delay: 0.5 })
-      .to("#rev3", { y: -300, x: 100, ease: "none" }); // Flotte indépendamment
+    gsap.timeline({ scrollTrigger: pTrigger })
+      .fromTo("#rev3", { opacity: 0, y: 150, x: 30 }, { opacity: 1, y: -220, x: 80, ease: "none" });
   }
 
   render();
