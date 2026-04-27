@@ -29,16 +29,15 @@
   .glass-card h2 { font-family: 'Roboto', sans-serif; font-weight: 900; text-transform: uppercase; font-size: 2rem; color: var(--neon-pink); margin-bottom: 1.2rem; }
   .glass-card p { font-family: 'Roboto', sans-serif; font-weight: 700; font-size: 1.2rem; color: #fff; line-height: 1.5; }
 
-  /* Style des avis mobiles */
   .review-card { position: absolute; width: 300px; padding: 1.8rem; z-index: 9; will-change: transform, opacity; }
   .review-card p { font-size: 1rem !important; }
   #rev1 { top: 12%; left: 6%; transform: rotate(-3deg); }
   #rev2 { top: 15%; right: 6%; transform: rotate(4deg); }
   #rev3 { bottom: 18%; left: 8%; transform: rotate(-2deg); }
 
-  /* Card principale fixe */
   #card6 { top: 50%; left: 50%; transform: translate(-50%, -50%); width: 480px; z-index: 15; }
-  .cta-button { display: inline-block; padding: 16px 32px; background: var(--neon-pink); color: #fff; text-decoration: none; font-family: 'Roboto', sans-serif; font-weight: 900; border-radius: 50px; text-transform: uppercase; margin-top: 20px; }
+  .cta-button { display: inline-block; padding: 16px 32px; background: var(--neon-pink); color: #fff; text-decoration: none; font-family: 'Roboto', sans-serif; font-weight: 900; border-radius: 50px; text-transform: uppercase; margin-top: 20px; box-shadow: 0 0 20px rgba(255, 0, 127, 0.4); transition: transform 0.3s; }
+  .cta-button:hover { transform: scale(1.05); }
 
   #card1 { bottom: 8%; left: 50%; margin-left: -210px; } 
   #card2 { top: 12%; left: 5%; } 
@@ -65,15 +64,16 @@
 
 <div id="canvas-container">
   <canvas id="canvas"></canvas>
-  <div class="glass-card" id="card1"><h2>La rencontre</h2><p>Deux âmes, un même rythme.</p></div>
-  <div class="glass-card" id="card2"><h2>L'envie</h2><p>Le rêve commence à prendre forme.</p></div>
-  <div class="glass-card" id="card3"><h2>La demande</h2><p>Un instant suspendu, une promesse.</p></div>
-  <div class="glass-card" id="card4"><h2>Le stress</h2><p>Ne laissez pas le stress gâcher votre moment.</p></div>
-  <div class="glass-card" id="card5"><h2>La solution</h2><p>Progrès rapides, intimité totale.</p></div>
   
-  <div class="glass-card review-card" id="rev1"><p>"On a ébloui tout le monde !"<br><strong>– Julie & Marc</strong></p></div>
-  <div class="glass-card review-card" id="rev2"><p>"Pédagogie et bienveillance au top."<br><strong>– Thomas & Léa</strong></p></div>
-  <div class="glass-card review-card" id="rev3"><p>"Un souvenir gravé à jamais."<br><strong>– Sarah & Kev</strong></p></div>
+  <div class="glass-card" id="card1"><h2>La rencontre</h2><p>Le début d’une histoire qui ne ressemble qu’à vous.</p></div>
+  <div class="glass-card" id="card2"><h2>L'envie</h2><p>L’envie de surprendre et de créer l’inoubliable.</p></div>
+  <div class="glass-card" id="card3"><h2>La demande</h2><p>Un moment suspendu où tout devient possible.</p></div>
+  <div class="glass-card" id="card4"><h2>Le stress</h2><p>Peur d’être ridicule ou de rater votre moment ? Ne laissez pas le doute s'installer.</p></div>
+  <div class="glass-card" id="card5"><h2>La solution</h2><p>Une chorégraphie sur-mesure et des cours privés pour briller avec assurance.</p></div>
+  
+  <div class="glass-card review-card" id="rev1"><p>"On n'avait jamais dansé, et pourtant on a ébloui tout le monde !"<br><strong>– Julie & Marc</strong></p></div>
+  <div class="glass-card review-card" id="rev2"><p>"Une pédagogie et une bienveillance qui changent tout. Merci Laet !"<br><strong>– Thomas & Léa</strong></p></div>
+  <div class="glass-card review-card" id="rev3"><p>"Le plus beau souvenir de notre mariage, gravé à jamais."<br><strong>– Sarah & Kev</strong></p></div>
 
   <div class="glass-card" id="card6">
     <h2>L'apothéose</h2>
@@ -166,7 +166,6 @@ function initScroll() {
     }).to(t.id, { opacity: 1, y: 0, duration: 0.3 }).to(t.id, { opacity: 1, duration: 0.4 }).to(t.id, { opacity: 0, y: -20, duration: 0.3 });
   });
 
-  // CARD 6 FIXE (Apparition à 82%)
   gsap.timeline({
     scrollTrigger: {
       trigger: "body", start: "82% top", end: "100% top", scrub: true,
@@ -174,18 +173,11 @@ function initScroll() {
     }
   }).fromTo("#card6", { opacity: 0 }, { opacity: 1, duration: 0.5 });
 
-  // AVIS PARALLAXE (Apparition décalée à 85%)
   if (window.innerWidth >= 768) {
     const pTrigger = { trigger: "body", start: "85% top", end: "100% top", scrub: 2.5 };
-
-    gsap.timeline({ scrollTrigger: pTrigger })
-      .fromTo("#rev1", { opacity: 0, y: 100, x: -50 }, { opacity: 1, y: -150, x: -100, ease: "none" });
-
-    gsap.timeline({ scrollTrigger: pTrigger })
-      .fromTo("#rev2", { opacity: 0, y: -50, x: 50 }, { opacity: 1, y: 180, x: 120, ease: "none" });
-
-    gsap.timeline({ scrollTrigger: pTrigger })
-      .fromTo("#rev3", { opacity: 0, y: 150, x: 30 }, { opacity: 1, y: -220, x: 80, ease: "none" });
+    gsap.timeline({ scrollTrigger: pTrigger }).fromTo("#rev1", { opacity: 0, y: 100, x: -50 }, { opacity: 1, y: -150, x: -100, ease: "none" });
+    gsap.timeline({ scrollTrigger: pTrigger }).fromTo("#rev2", { opacity: 0, y: -50, x: 50 }, { opacity: 1, y: 180, x: 120, ease: "none" });
+    gsap.timeline({ scrollTrigger: pTrigger }).fromTo("#rev3", { opacity: 0, y: 150, x: 30 }, { opacity: 1, y: -220, x: 80, ease: "none" });
   }
 
   render();
