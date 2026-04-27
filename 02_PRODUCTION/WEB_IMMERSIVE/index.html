@@ -5,189 +5,71 @@
 <title>Laet's Danse Studio – Point Focal Prestige</title>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@700;900&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg-color: #000;
-    --neon-pink: #ff007f;
-    --glass-bg: rgba(255, 255, 255, 0.08);
-  }
-  
+  :root { --bg-color: #000; --neon-pink: #ff007f; --glass-bg: rgba(255, 255, 255, 0.08); }
   * { margin:0; padding:0; box-sizing:border-box; }
-  
-  body { 
-    background: var(--bg-color); 
-    height: 1500vh;
-    overflow-x: hidden;
-    -webkit-font-smoothing: antialiased;
-  }
-  
-  #canvas-container { 
-    position: fixed; top: 0; left: 0; 
-    width: 100vw; height: 100vh; 
-    z-index: 1; background: #000;
-    overflow: hidden;
-    perspective: 2000px;
-  }
-  
+  body { background: var(--bg-color); height: 1500vh; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+  #canvas-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; background: #000; overflow: hidden; }
   #canvas { display: block; width: 100%; height: 100%; }
-
-  /* Logo principal haut gauche (animé) */
-  #brand-logo {
-    position: absolute;
-    top: 30px; left: 30px;
-    width: 120px; opacity: 0;
-    transition: opacity 1s ease;
-    z-index: 100;
-  }
-
-  /* --- CORRECTION DU LOGO FILIGRANE --- */
-  #fixed-watermark {
-    position: fixed;
-    bottom: 50px;    /* REMONTÉ : de 25px à 50px */
-    right: 40px;     /* ÉCARTÉ : de 25px à 40px */
-    width: 100px;    /* LÉGÈREMENT PLUS GRAND */
-    opacity: 0.6;    /* LÉGÈREMENT PLUS NET */
-    z-index: 100;
-    pointer-events: none;
-    filter: drop-shadow(0 0 15px rgba(0,0,0,0.7)); /* OMBRE PLUS FORTE */
-    transition: opacity 0.3s ease;
-  }
+  #brand-logo { position: absolute; top: 30px; left: 30px; width: 120px; opacity: 0; transition: opacity 1s ease; z-index: 100; }
+  #fixed-watermark { position: fixed; bottom: 40px; right: 40px; width: 90px; opacity: 0.6; z-index: 100; pointer-events: none; filter: drop-shadow(0 0 15px rgba(0,0,0,0.7)); }
 
   .glass-card {
-    position: absolute;
-    background: var(--glass-bg);
-    backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 20px; padding: 2.2rem;
-    text-align: center; opacity: 0; pointer-events: none;
-    z-index: 10; width: 420px;
+    position: absolute; background: var(--glass-bg); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+    border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 20px; padding: 2.2rem;
+    text-align: center; opacity: 0; pointer-events: none; z-index: 10; width: 420px;
     box-shadow: 0 25px 60px rgba(0,0,0,0.7);
-    will-change: transform, opacity;
   }
+  .glass-card h2 { font-family: 'Roboto', sans-serif; font-weight: 900; text-transform: uppercase; font-size: 2rem; color: var(--neon-pink); margin-bottom: 1.2rem; }
+  .glass-card p { font-family: 'Roboto', sans-serif; font-weight: 700; font-size: 1.2rem; color: #ffffff; line-height: 1.5; }
 
-  .glass-card.active { pointer-events: auto; }
-
-  .glass-card h2 {
-    font-family: 'Roboto', sans-serif; font-weight: 900;
-    text-transform: uppercase; font-size: 2rem;
-    color: var(--neon-pink); margin-bottom: 1.2rem;
-    text-shadow: 0 0 15px rgba(255, 0, 127, 0.6);
-  }
-
-  .glass-card p {
-    font-family: 'Roboto', sans-serif; font-weight: 700;
-    font-size: 1.2rem; color: #ffffff; line-height: 1.5;
-  }
-
-  .review-card {
-    position: absolute; 
-    width: 260px; 
-    padding: 1.5rem;
-    z-index: 9;
-    transform-style: preserve-3d;
-  }
+  .review-card { position: absolute; width: 260px; padding: 1.5rem; z-index: 9; }
   .review-card p { font-size: 1rem !important; line-height: 1.3; }
+  #rev1 { top: 15%; left: 8%; transform: rotate(-3deg); }
+  #rev2 { top: 18%; right: 8%; transform: rotate(4deg); }
+  #rev3 { bottom: 20%; left: 10%; transform: rotate(-2deg); }
 
-  #rev1 { top: 15%; left: 10%; transform: rotate(-3deg); }
-  #rev2 { top: 18%; right: 10%; transform: rotate(4deg); }
-  #rev3 { bottom: 18%; left: 12%; transform: rotate(-2deg); }
+  #card6 { top: 50%; left: 50%; transform: translate(-50%, -50%); width: 480px; z-index: 15; }
+  .cta-button { display: inline-block; padding: 16px 28px; background: var(--neon-pink); color: #fff; text-decoration: none; font-family: 'Roboto', sans-serif; font-weight: 900; border-radius: 50px; text-transform: uppercase; margin: 20px 0 15px 0; }
+  .phone-link { display: block; color: #fff; text-decoration: none; font-family: 'Roboto', sans-serif; font-weight: 900; font-size: 1.4rem; }
 
-  #card6 { 
-    top: 50%; left: 50%; 
-    transform: translate(-50%, -50%) translateZ(40px);
-    width: 480px; 
-    z-index: 15;
-    pointer-events: none;
-  }
-  #card6.active { pointer-events: auto; }
-
-  .cta-button {
-    display: inline-block; padding: 16px 28px;
-    background: var(--neon-pink); border: none;
-    color: #fff; text-decoration: none;
-    font-family: 'Roboto', sans-serif; font-weight: 900;
-    border-radius: 50px; text-transform: uppercase;
-    margin: 20px 0 15px 0; transition: all 0.3s ease;
-    box-shadow: 0 0 15px rgba(255, 0, 127, 0.4);
-  }
-  .cta-button:hover { transform: scale(1.05); box-shadow: 0 0 30px var(--neon-pink); }
-  
-  .urgency-tag {
-    display: inline-block; 
-    font-size: 0.85rem; color: #ffffff;
-    background: rgba(0, 0, 0, 0.6);
-    padding: 6px 15px; border-radius: 4px;
-    border-left: 3px solid var(--neon-pink);
-    font-family: 'Roboto', sans-serif; font-weight: 900; text-transform: uppercase; margin-bottom: 20px;
-  }
-
-  .phone-link {
-    display: block; color: #fff; text-decoration: none;
-    font-family: 'Roboto', sans-serif; font-weight: 900; font-size: 1.4rem;
-  }
-
-  .glass-card:not(#card6):not(.review-card) { transform-style: preserve-3d; }
   #card1 { bottom: 8%; left: 50%; margin-left: -210px; } 
   #card2 { top: 12%; left: 5%; } 
   #card3 { top: 12%; right: 5%; } 
   #card4 { bottom: 12%; right: 5%; } 
   #card5 { bottom: 12%; left: 5%; } 
 
-  /* --- CORRECTION MOBILE DU FILIGRANE --- */
   @media (max-width: 768px) {
-    .glass-card { 
-      width: 92% !important; left: 4% !important; right: auto !important;
-      bottom: 6% !important; top: auto !important; margin: 0 !important;
-      transform: none !important; padding: 1.5rem;
-    }
-    #card6 { bottom: 8% !important; top: auto !important; transform: none !important; z-index: 20; }
+    .glass-card:not(.review-card) { width: 92% !important; left: 4% !important; bottom: 6% !important; top: auto !important; margin: 0 !important; }
     .review-card { display: none; }
     #brand-logo { width: 90px; top: 15px; left: 15px; }
-    #fixed-watermark { 
-      width: 70px;      /* Légèrement réduit */
-      bottom: 30px;    /* Remonté pour mobile */
-      right: 20px;     /* Écarté */
-      opacity: 0.5; 
-    }
   }
 
-  #preloader {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: #000; z-index: 9999; display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-  }
+  #preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; }
   #preloader-bar { width: 200px; height: 2px; background: #222; margin-top: 20px; }
   #preloader-fill { height: 100%; width: 0%; background: var(--neon-pink); }
 </style>
 </head>
 <body>
 
-<div id="preloader">
-  <div style="color:#fff; font-family:'Roboto'; letter-spacing:4px; font-size:12px; font-weight:900;">LAET'S DANSE STUDIO</div>
-  <div id="preloader-bar"><div id="preloader-fill"></div></div>
-</div>
+<div id="preloader"><div id="preloader-bar"><div id="preloader-fill"></div></div></div>
 
 <img src="./03_ASSETS/logo.png" id="brand-logo" alt="Logo">
-
 <img src="./03_ASSETS/LOGO_LDS/logo-lds.png" id="fixed-watermark" alt="LDS Watermark">
 
 <div id="canvas-container">
   <canvas id="canvas"></canvas>
-  
   <div class="glass-card" id="card1"><h2>La rencontre</h2><p>Deux âmes, un même rythme.</p></div>
   <div class="glass-card" id="card2"><h2>L'envie</h2><p>Le rêve commence à prendre forme.</p></div>
   <div class="glass-card" id="card3"><h2>La demande</h2><p>Un instant suspendu, une promesse.</p></div>
   <div class="glass-card" id="card4"><h2>Le stress</h2><p>Ne laissez pas le stress gâcher votre moment. On s'occupe de tout.</p></div>
   <div class="glass-card" id="card5"><h2>La solution</h2><p>Progrès rapides, intimité totale. Apprenez dans le confort d'un studio cosy.</p></div>
-
   <div class="glass-card review-card" id="rev1"><p>"On a ébloui tout le monde !"<br><strong>– Julie & Marc</strong></p></div>
   <div class="glass-card review-card" id="rev2"><p>"Pédagogie et bienveillance au top."<br><strong>– Thomas & Léa</strong></p></div>
   <div class="glass-card review-card" id="rev3"><p>"Un souvenir gravé à jamais."<br><strong>– Sarah & Kev</strong></p></div>
-  
   <div class="glass-card" id="card6">
     <h2>L'apothéose</h2>
     <p>Créez le souvenir dont vos invités parleront encore dans 10 ans.</p>
     <a href="https://laetsdanse.fr/contact" target="_blank" class="cta-button">Réserver mon coaching d'essai</a>
-    <div class="urgency-tag">⚠️ Planning 2026 bientôt complet</div>
     <a href="tel:0681178159" class="phone-link">06 81 17 81 59</a>
   </div>
 </div>
@@ -222,7 +104,6 @@ function startApp() {
   }});
 }
 
-/* --- MODIFICATION DU RENDU CANVAS --- */
 function render() {
   const currentIdx = Math.round(sequence.frame);
   const img = images[currentIdx];
@@ -231,44 +112,43 @@ function render() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
   
-  document.getElementById('brand-logo').style.opacity = (currentIdx > 60) ? "1" : "0";
-
-  // MODIFICATION ICI : On utilise un mode "Contain" au lieu de "Cover"
-  // L'image sera toujours affichée EN ENTIER dans le canvas.
   const canvasRatio = canvas.width / canvas.height;
   const imgRatio = img.width / img.height;
   
   let drawWidth, drawHeight;
-  
-  // Si le canvas est plus large que l'image, on adapte la hauteur
-  if (canvasRatio > imgRatio) {
-    drawHeight = canvas.height;
-    drawWidth = canvas.height * imgRatio;
+
+  // LOGIQUE DE ZOOM RADICALE : On ne dépasse jamais les bords de l'écran à la fin
+  if (currentIdx > 750) {
+    // SCENE FINALE : Mode "Contain" strict (On voit TOUTE l'image sans zoom)
+    if (canvasRatio > imgRatio) {
+      drawHeight = canvas.height;
+      drawWidth = canvas.height * imgRatio;
+    } else {
+      drawWidth = canvas.width;
+      drawHeight = canvas.width / imgRatio;
+    }
   } else {
-    // Sinon, on adapte la largeur
-    drawWidth = canvas.width;
-    drawHeight = canvas.width / imgRatio;
+    // DEBUT : Mode "Cover" (Plein écran immersif)
+    if (canvasRatio > imgRatio) {
+      drawWidth = canvas.width;
+      drawHeight = canvas.width / imgRatio;
+    } else {
+      drawHeight = canvas.height;
+      drawWidth = canvas.height * imgRatio;
+    }
   }
 
-  // Centre l'image dans le canvas
-  const offsetX = (canvas.width - drawWidth) / 2;
-  const offsetY = (canvas.height - drawHeight) / 2;
-  
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
+  ctx.drawImage(img, (canvas.width - drawWidth) / 2, (canvas.height - drawHeight) / 2, drawWidth, drawHeight);
+  document.getElementById('brand-logo').style.opacity = (currentIdx > 60) ? "1" : "0";
 }
 
 function initScroll() {
   gsap.registerPlugin(ScrollTrigger);
-
   gsap.to(sequence, {
     frame: totalFrames - 1,
     ease: "none",
-    scrollTrigger: {
-      trigger: "body", start: "top top", end: "bottom bottom", scrub: 0.1,
-      invalidateOnRefresh: true,
-      onUpdate: render
-    }
+    scrollTrigger: { trigger: "body", start: "top top", end: "bottom bottom", scrub: 0.1, onUpdate: render }
   });
 
   const timings = [
@@ -276,42 +156,20 @@ function initScroll() {
     { id: "#card3", s: 420, e: 522 }, { id: "#card4", s: 539, e: 618 },
     { id: "#card5", s: 625, e: 727 }, 
     { id: "#card6", s: 785, e: 885 },
-    { id: "#rev1", s: 805, e: 885 },
-    { id: "#rev2", s: 815, e: 885 },
-    { id: "#rev3", s: 825, e: 885 }
+    { id: "#rev1", s: 795, e: 885 }, { id: "#rev2", s: 805, e: 885 }, { id: "#rev3", s: 815, e: 885 }
   ];
 
   timings.forEach(t => {
-    const el = document.querySelector(t.id);
     gsap.timeline({
       scrollTrigger: {
         trigger: "body", 
         start: `${(t.s/totalFrames)*100}% top`, 
         end: `${(t.e/totalFrames)*100}% top`, 
         scrub: true,
-        onToggle: self => el.classList.toggle('active', self.isActive)
+        onToggle: self => document.querySelector(t.id).style.pointerEvents = self.isActive ? 'auto' : 'none'
       }
-    })
-    .to(t.id, { opacity: 1, y: 0, duration: 0.3 })
-    .to(t.id, { opacity: 1, duration: 0.4 })
-    .to(t.id, { opacity: 0, y: -20, duration: 0.3 });
+    }).to(t.id, { opacity: 1, y: 0, duration: 0.3 }).to(t.id, { opacity: 1, duration: 0.4 }).to(t.id, { opacity: 0, y: -20, duration: 0.3 });
   });
-
-  window.addEventListener("mousemove", (e) => {
-    const x = (e.clientX / window.innerWidth - 0.5);
-    const y = (e.clientY / window.innerHeight - 0.5);
-    
-    gsap.to(".glass-card:not(#card6):not(.review-card)", {
-      x: x * 20, y: y * 20, z: 40, 
-      rotationY: x * 8, rotationX: -y * 8,
-      duration: 1.2, ease: "power2.out"
-    });
-
-    gsap.to("#rev1", { x: x * 40, y: y * 40, z: 60, rotationY: x * 15, duration: 1.5, ease: "power2.out" });
-    gsap.to("#rev2", { x: x * 25, y: y * 25, z: 20, rotationY: x * 10, duration: 1.8, ease: "power2.out" });
-    gsap.to("#rev3", { x: x * 35, y: y * 35, z: 80, rotationY: x * 20, duration: 1.3, ease: "power2.out" });
-  });
-
   render();
 }
 window.addEventListener('resize', render);
