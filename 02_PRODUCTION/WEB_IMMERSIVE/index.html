@@ -38,7 +38,6 @@
     z-index: 100;
   }
 
-  /* Base commune des cartes */
   .glass-card {
     position: absolute;
     background: var(--glass-bg);
@@ -65,32 +64,28 @@
     font-size: 1.2rem; color: #ffffff; line-height: 1.5;
   }
 
-  /* SPÉCIFICITÉ DES CARTES D'AVIS (Orbitale) */
   .review-card {
     position: absolute; 
     width: 260px; 
     padding: 1.5rem;
     z-index: 9;
-    transform-style: preserve-3d; /* Nécessaire pour leur parallaxe propre */
+    transform-style: preserve-3d;
   }
   .review-card p { font-size: 1rem !important; line-height: 1.3; }
 
-  /* Positions Desktop Orbitale */
   #rev1 { top: 15%; left: 10%; transform: rotate(-3deg); }
   #rev2 { top: 18%; right: 10%; transform: rotate(4deg); }
   #rev3 { bottom: 18%; left: 12%; transform: rotate(-2deg); }
 
-  /* CARTE PRINCIPALE BLOQUÉE (Point Focal) */
   #card6 { 
     top: 50%; left: 50%; 
-    transform: translate(-50%, -50%) translateZ(40px); /* Légèrement avancée mais fixe */
+    transform: translate(-50%, -50%) translateZ(40px);
     width: 480px; 
-    z-index: 15; /* Devant les avis */
-    pointer-events: none; /* Le clic doit passer sur le CTA */
+    z-index: 15;
+    pointer-events: none;
   }
   #card6.active { pointer-events: auto; }
 
-  /* Design CTA */
   .cta-button {
     display: inline-block; padding: 16px 28px;
     background: var(--neon-pink); border: none;
@@ -116,7 +111,6 @@
     font-family: 'Roboto', sans-serif; font-weight: 900; font-size: 1.4rem;
   }
 
-  /* Positions Narratives Standard (avec transformation 3D pour la souris) */
   .glass-card:not(#card6):not(.review-card) { transform-style: preserve-3d; }
   #card1 { bottom: 8%; left: 50%; margin-left: -210px; } 
   #card2 { top: 12%; left: 5%; } 
@@ -124,7 +118,6 @@
   #card4 { bottom: 12%; right: 5%; } 
   #card5 { bottom: 12%; left: 5%; } 
 
-  /* ADAPTATION MOBILE */
   @media (max-width: 768px) {
     .glass-card { 
       width: 92% !important; left: 4% !important; right: auto !important;
@@ -152,7 +145,7 @@
   <div id="preloader-bar"><div id="preloader-fill"></div></div>
 </div>
 
-<img src="../../03_ASSETS/logo.png" id="brand-logo" alt="Logo">
+<img src="./03_ASSETS/logo.png" id="brand-logo" alt="Logo">
 
 <div id="canvas-container">
   <canvas id="canvas"></canvas>
@@ -189,8 +182,8 @@ const sequence = { frame: 0 };
 function preload() {
   for (let i = 1; i <= totalFrames; i++) {
     const img = new Image();
-    // MIS EN .WEBP ICI - Change en .jpg si tu veux tester avant compression
-    img.src = `../../03_ASSETS/SEQUENCE_FINALE/frame_${String(i).padStart(4, '0')}.webp`;
+    // CORRECTION DU CHEMIN POUR VERCEL (./ au lieu de ../../)
+    img.src = `./03_ASSETS/SEQUENCE_FINALE/frame_${String(i).padStart(4, '0')}.webp`;
     images.push(img);
     img.onload = () => {
       const loaded = images.filter(i => i.complete).length;
@@ -251,7 +244,6 @@ function initScroll() {
     { id: "#card1", s: 65, e: 303 }, { id: "#card2", s: 337, e: 402 },
     { id: "#card3", s: 420, e: 522 }, { id: "#card4", s: 539, e: 618 },
     { id: "#card5", s: 625, e: 727 }, 
-    // Timings Séquence Finale (avec décalage)
     { id: "#card6", s: 785, e: 885 },
     { id: "#rev1", s: 805, e: 885 },
     { id: "#rev2", s: 815, e: 885 },
@@ -274,26 +266,19 @@ function initScroll() {
     .to(t.id, { opacity: 0, y: -20, duration: 0.3 });
   });
 
-  // PARALLAXE SÉLECTIVE (La clé de ton besoin)
   window.addEventListener("mousemove", (e) => {
     const x = (e.clientX / window.innerWidth - 0.5);
     const y = (e.clientY / window.innerHeight - 0.5);
     
-    // 1. Parallaxe standard pour les cartes narratives des scènes 1 à 5
     gsap.to(".glass-card:not(#card6):not(.review-card)", {
       x: x * 20, y: y * 20, z: 40, 
       rotationY: x * 8, rotationX: -y * 8,
       duration: 1.2, ease: "power2.out"
     });
 
-    // 2. PARALLAXE DES AVIS (orbitale autour du centre fixe)
-    // Elles flottent à des profondeurs et vitesses différentes
     gsap.to("#rev1", { x: x * 40, y: y * 40, z: 60, rotationY: x * 15, duration: 1.5, ease: "power2.out" });
     gsap.to("#rev2", { x: x * 25, y: y * 25, z: 20, rotationY: x * 10, duration: 1.8, ease: "power2.out" });
     gsap.to("#rev3", { x: x * 35, y: y * 35, z: 80, rotationY: x * 20, duration: 1.3, ease: "power2.out" });
-
-    // 3. LA CARTE PRINCIPALE (#card6) EST VOLONTAIREMENT EXCLUE DU SCRIPT MOUSEMOVE
-    // Elle reste fixe en translate(-50%, -50%) avec sa profondeur translateZ(40px) définie en CSS.
   });
 
   render();
