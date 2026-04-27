@@ -30,12 +30,26 @@
   
   #canvas { display: block; width: 100%; height: 100%; }
 
+  /* Logo principal haut gauche (animé) */
   #brand-logo {
     position: absolute;
     top: 30px; left: 30px;
     width: 120px; opacity: 0;
     transition: opacity 1s ease;
     z-index: 100;
+  }
+
+  /* Nouveau Logo filigrane bas droite (fixe) */
+  #fixed-watermark {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    width: 90px;
+    opacity: 0.5;
+    z-index: 100;
+    pointer-events: none;
+    filter: drop-shadow(0 0 12px rgba(0,0,0,0.6));
+    transition: opacity 0.3s ease;
   }
 
   .glass-card {
@@ -127,6 +141,7 @@
     #card6 { bottom: 8% !important; top: auto !important; transform: none !important; z-index: 20; }
     .review-card { display: none; }
     #brand-logo { width: 90px; top: 15px; left: 15px; }
+    #fixed-watermark { width: 65px; bottom: 15px; right: 15px; opacity: 0.4; }
   }
 
   #preloader {
@@ -146,6 +161,8 @@
 </div>
 
 <img src="./03_ASSETS/logo.png" id="brand-logo" alt="Logo">
+
+<img src="./03_ASSETS/LOGO_LDS/logo-lds.png" id="fixed-watermark" alt="LDS Watermark">
 
 <div id="canvas-container">
   <canvas id="canvas"></canvas>
@@ -182,7 +199,6 @@ const sequence = { frame: 0 };
 function preload() {
   for (let i = 1; i <= totalFrames; i++) {
     const img = new Image();
-    // CORRECTION DU CHEMIN POUR VERCEL (./ au lieu de ../../)
     img.src = `./03_ASSETS/SEQUENCE_FINALE/frame_${String(i).padStart(4, '0')}.webp`;
     images.push(img);
     img.onload = () => {
