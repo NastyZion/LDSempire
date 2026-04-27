@@ -38,17 +38,15 @@
     z-index: 100;
   }
 
-  /* Filigrane bas droite amélioré */
   #fixed-watermark {
     position: fixed;
-    bottom: 50px;
-    right: 40px;
-    width: 100px;
-    opacity: 0.6;
-    z-index: 100;
+    bottom: 60px; /* Remonté pour éviter d'être coupé sur mobile */
+    right: 30px;
+    width: 80px;
+    opacity: 0.7;
+    z-index: 1000; /* Priorité maximale */
     pointer-events: none;
-    filter: drop-shadow(0 0 15px rgba(0,0,0,0.7));
-    transition: opacity 0.3s ease;
+    filter: drop-shadow(0 0 10px rgba(0,0,0,0.8));
   }
 
   .glass-card {
@@ -60,7 +58,6 @@
     text-align: center; opacity: 0; pointer-events: none;
     z-index: 10; width: 420px;
     box-shadow: 0 25px 60px rgba(0,0,0,0.7);
-    will-change: transform, opacity;
   }
 
   .glass-card.active { pointer-events: auto; }
@@ -69,7 +66,6 @@
     font-family: 'Roboto', sans-serif; font-weight: 900;
     text-transform: uppercase; font-size: 2rem;
     color: var(--neon-pink); margin-bottom: 1.2rem;
-    text-shadow: 0 0 15px rgba(255, 0, 127, 0.6);
   }
 
   .glass-card p {
@@ -77,27 +73,14 @@
     font-size: 1.2rem; color: #ffffff; line-height: 1.5;
   }
 
-  .review-card {
-    position: absolute; 
-    width: 260px; 
-    padding: 1.5rem;
-    z-index: 9;
-    transform-style: preserve-3d;
-  }
-  .review-card p { font-size: 1rem !important; line-height: 1.3; }
-
-  #rev1 { top: 15%; left: 10%; transform: rotate(-3deg); }
-  #rev2 { top: 18%; right: 10%; transform: rotate(4deg); }
-  #rev3 { bottom: 18%; left: 12%; transform: rotate(-2deg); }
+  .review-card { position: absolute; width: 260px; padding: 1.5rem; z-index: 9; }
 
   #card6 { 
     top: 50%; left: 50%; 
-    transform: translate(-50%, -50%) translateZ(40px);
+    transform: translate(-50%, -50%);
     width: 480px; 
     z-index: 15;
-    pointer-events: none;
   }
-  #card6.active { pointer-events: auto; }
 
   .cta-button {
     display: inline-block; padding: 16px 28px;
@@ -105,26 +88,17 @@
     color: #fff; text-decoration: none;
     font-family: 'Roboto', sans-serif; font-weight: 900;
     border-radius: 50px; text-transform: uppercase;
-    margin: 20px 0 15px 0; transition: all 0.3s ease;
-    box-shadow: 0 0 15px rgba(255, 0, 127, 0.4);
+    margin: 20px 0 15px 0;
   }
-  .cta-button:hover { transform: scale(1.05); box-shadow: 0 0 30px var(--neon-pink); }
   
   .urgency-tag {
-    display: inline-block; 
-    font-size: 0.85rem; color: #ffffff;
-    background: rgba(0, 0, 0, 0.6);
-    padding: 6px 15px; border-radius: 4px;
-    border-left: 3px solid var(--neon-pink);
-    font-family: 'Roboto', sans-serif; font-weight: 900; text-transform: uppercase; margin-bottom: 20px;
+    display: inline-block; font-size: 0.85rem; color: #ffffff;
+    background: rgba(0, 0, 0, 0.6); padding: 6px 15px; border-radius: 4px;
+    border-left: 3px solid var(--neon-pink); margin-bottom: 20px;
   }
 
-  .phone-link {
-    display: block; color: #fff; text-decoration: none;
-    font-family: 'Roboto', sans-serif; font-weight: 900; font-size: 1.4rem;
-  }
+  .phone-link { display: block; color: #fff; text-decoration: none; font-size: 1.4rem; font-weight: 900; }
 
-  .glass-card:not(#card6):not(.review-card) { transform-style: preserve-3d; }
   #card1 { bottom: 8%; left: 50%; margin-left: -210px; } 
   #card2 { top: 12%; left: 5%; } 
   #card3 { top: 12%; right: 5%; } 
@@ -133,19 +107,10 @@
 
   @media (max-width: 768px) {
     .glass-card { 
-      width: 92% !important; left: 4% !important; right: auto !important;
-      bottom: 6% !important; top: auto !important; margin: 0 !important;
-      transform: none !important; padding: 1.5rem;
+      width: 92% !important; left: 4% !important; bottom: 8% !important; top: auto !important; margin: 0 !important;
     }
-    #card6 { bottom: 8% !important; top: auto !important; transform: none !important; z-index: 20; }
     .review-card { display: none; }
-    #brand-logo { width: 90px; top: 15px; left: 15px; }
-    #fixed-watermark { 
-      width: 70px;
-      bottom: 30px;
-      right: 20px;
-      opacity: 0.5; 
-    }
+    #fixed-watermark { width: 60px; bottom: 20px; right: 20px; }
   }
 
   #preloader {
@@ -166,26 +131,22 @@
 
 <img src="./03_ASSETS/logo.png" id="brand-logo" alt="Logo">
 
-<img src="./03_ASSETS/LOGO_LDS/logo-lds.png?v=2" id="fixed-watermark" alt="LDS Watermark">
+<img src="03_ASSETS/LOGO_LDS/logo-lds.png" id="fixed-watermark" onerror="this.src='./03_ASSETS/logo.png'; this.style.width='50px';" alt="LDS">
 
 <div id="canvas-container">
   <canvas id="canvas"></canvas>
-  
   <div class="glass-card" id="card1"><h2>La rencontre</h2><p>Deux âmes, un même rythme.</p></div>
   <div class="glass-card" id="card2"><h2>L'envie</h2><p>Le rêve commence à prendre forme.</p></div>
   <div class="glass-card" id="card3"><h2>La demande</h2><p>Un instant suspendu, une promesse.</p></div>
-  <div class="glass-card" id="card4"><h2>Le stress</h2><p>Ne laissez pas le stress gâcher votre moment. On s'occupe de tout.</p></div>
-  <div class="glass-card" id="card5"><h2>La solution</h2><p>Progrès rapides, intimité totale. Apprenez dans le confort d'un studio cosy.</p></div>
-
-  <div class="glass-card review-card" id="rev1"><p>"On a ébloui tout le monde !"<br><strong>– Julie & Marc</strong></p></div>
-  <div class="glass-card review-card" id="rev2"><p>"Pédagogie et bienveillance au top."<br><strong>– Thomas & Léa</strong></p></div>
-  <div class="glass-card review-card" id="rev3"><p>"Un souvenir gravé à jamais."<br><strong>– Sarah & Kev</strong></p></div>
-  
+  <div class="glass-card" id="card4"><h2>Le stress</h2><p>Ne laissez pas le stress gâcher votre moment.</p></div>
+  <div class="glass-card" id="card5"><h2>La solution</h2><p>Progrès rapides, intimité totale.</p></div>
+  <div class="glass-card review-card" id="rev1"><p>"On a ébloui tout le monde !"</p></div>
+  <div class="glass-card review-card" id="rev2"><p>"Pédagogie au top."</p></div>
+  <div class="glass-card review-card" id="rev3"><p>"Un souvenir gravé."</p></div>
   <div class="glass-card" id="card6">
     <h2>L'apothéose</h2>
-    <p>Créez le souvenir dont vos invités parleront encore dans 10 ans.</p>
-    <a href="https://laetsdanse.fr/contact" target="_blank" class="cta-button">Réserver mon coaching d'essai</a>
-    <div class="urgency-tag">⚠️ Planning 2026 bientôt complet</div>
+    <a href="https://laetsdanse.fr/contact" target="_blank" class="cta-button">Réserver mon coaching</a>
+    <div class="urgency-tag">⚠️ Planning 2026 complet bientôt</div>
     <a href="tel:0681178159" class="phone-link">06 81 17 81 59</a>
   </div>
 </div>
@@ -234,30 +195,41 @@ function render() {
   const imgRatio = img.width / img.height;
   
   let drawWidth, drawHeight;
-  if (canvasRatio > imgRatio) {
-    drawHeight = canvas.height;
-    drawWidth = canvas.height * imgRatio;
+
+  // LOGIQUE DE ZOOM ADAPTATIVE
+  if (window.innerWidth < 768) {
+    // MOBILE : Mode "Cover" (On remplit l'écran, quitte à couper les côtés)
+    if (canvasRatio > imgRatio) {
+      drawWidth = canvas.width;
+      drawHeight = canvas.width / imgRatio;
+    } else {
+      drawHeight = canvas.height;
+      drawWidth = canvas.height * imgRatio;
+    }
   } else {
-    drawWidth = canvas.width;
-    drawHeight = canvas.width / imgRatio;
+    // PC : Mode "Contain" (On voit tout sans zoom)
+    if (canvasRatio > imgRatio) {
+      drawHeight = canvas.height;
+      drawWidth = canvas.height * imgRatio;
+    } else {
+      drawWidth = canvas.width;
+      drawHeight = canvas.width / imgRatio;
+    }
   }
 
   const offsetX = (canvas.width - drawWidth) / 2;
   const offsetY = (canvas.height - drawHeight) / 2;
-  
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
 }
 
 function initScroll() {
   gsap.registerPlugin(ScrollTrigger);
-
   gsap.to(sequence, {
     frame: totalFrames - 1,
     ease: "none",
     scrollTrigger: {
       trigger: "body", start: "top top", end: "bottom bottom", scrub: 0.1,
-      invalidateOnRefresh: true,
       onUpdate: render
     }
   });
@@ -265,42 +237,22 @@ function initScroll() {
   const timings = [
     { id: "#card1", s: 65, e: 303 }, { id: "#card2", s: 337, e: 402 },
     { id: "#card3", s: 420, e: 522 }, { id: "#card4", s: 539, e: 618 },
-    { id: "#card5", s: 625, e: 727 }, 
-    { id: "#card6", s: 785, e: 885 },
-    { id: "#rev1", s: 805, e: 885 },
-    { id: "#rev2", s: 815, e: 885 },
-    { id: "#rev3", s: 825, e: 885 }
+    { id: "#card5", s: 625, e: 727 }, { id: "#card6", s: 785, e: 885 }
   ];
 
   timings.forEach(t => {
-    const el = document.querySelector(t.id);
     gsap.timeline({
       scrollTrigger: {
         trigger: "body", 
         start: `${(t.s/totalFrames)*100}% top`, 
         end: `${(t.e/totalFrames)*100}% top`, 
         scrub: true,
-        onToggle: self => el.classList.toggle('active', self.isActive)
+        onToggle: self => document.querySelector(t.id).classList.toggle('active', self.isActive)
       }
     })
     .to(t.id, { opacity: 1, y: 0, duration: 0.3 })
     .to(t.id, { opacity: 1, duration: 0.4 })
     .to(t.id, { opacity: 0, y: -20, duration: 0.3 });
-  });
-
-  window.addEventListener("mousemove", (e) => {
-    const x = (e.clientX / window.innerWidth - 0.5);
-    const y = (e.clientY / window.innerHeight - 0.5);
-    
-    gsap.to(".glass-card:not(#card6):not(.review-card)", {
-      x: x * 20, y: y * 20, z: 40, 
-      rotationY: x * 8, rotationX: -y * 8,
-      duration: 1.2, ease: "power2.out"
-    });
-
-    gsap.to("#rev1", { x: x * 40, y: y * 40, z: 60, rotationY: x * 15, duration: 1.5, ease: "power2.out" });
-    gsap.to("#rev2", { x: x * 25, y: y * 25, z: 20, rotationY: x * 10, duration: 1.8, ease: "power2.out" });
-    gsap.to("#rev3", { x: x * 35, y: y * 35, z: 80, rotationY: x * 20, duration: 1.3, ease: "power2.out" });
   });
 
   render();
