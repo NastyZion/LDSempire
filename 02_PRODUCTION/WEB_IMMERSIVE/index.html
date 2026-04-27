@@ -39,16 +39,16 @@
     z-index: 100;
   }
 
-  /* Logo filigrane bas droite */
+  /* --- CORRECTION DU LOGO FILIGRANE --- */
   #fixed-watermark {
     position: fixed;
-    bottom: 50px;
-    right: 40px;
-    width: 100px;
-    opacity: 0.6;
+    bottom: 50px;    /* REMONTÉ : de 25px à 50px */
+    right: 40px;     /* ÉCARTÉ : de 25px à 40px */
+    width: 100px;    /* LÉGÈREMENT PLUS GRAND */
+    opacity: 0.6;    /* LÉGÈREMENT PLUS NET */
     z-index: 100;
     pointer-events: none;
-    filter: drop-shadow(0 0 15px rgba(0,0,0,0.7));
+    filter: drop-shadow(0 0 15px rgba(0,0,0,0.7)); /* OMBRE PLUS FORTE */
     transition: opacity 0.3s ease;
   }
 
@@ -132,6 +132,7 @@
   #card4 { bottom: 12%; right: 5%; } 
   #card5 { bottom: 12%; left: 5%; } 
 
+  /* --- CORRECTION MOBILE DU FILIGRANE --- */
   @media (max-width: 768px) {
     .glass-card { 
       width: 92% !important; left: 4% !important; right: auto !important;
@@ -142,9 +143,9 @@
     .review-card { display: none; }
     #brand-logo { width: 90px; top: 15px; left: 15px; }
     #fixed-watermark { 
-      width: 70px;
-      bottom: 30px;
-      right: 20px;
+      width: 70px;      /* Légèrement réduit */
+      bottom: 30px;    /* Remonté pour mobile */
+      right: 20px;     /* Écarté */
       opacity: 0.5; 
     }
   }
@@ -167,7 +168,7 @@
 
 <img src="./03_ASSETS/logo.png" id="brand-logo" alt="Logo">
 
-<img src="./03_ASSETS/LOGO_LDS/logo-lds.PNG" id="fixed-watermark" alt="LDS Watermark">
+<img src="./03_ASSETS/LOGO_LDS/logo-lds.png" id="fixed-watermark" alt="LDS Watermark">
 
 <div id="canvas-container">
   <canvas id="canvas"></canvas>
@@ -221,6 +222,7 @@ function startApp() {
   }});
 }
 
+/* --- MODIFICATION DU RENDU CANVAS --- */
 function render() {
   const currentIdx = Math.round(sequence.frame);
   const img = images[currentIdx];
@@ -231,18 +233,24 @@ function render() {
   
   document.getElementById('brand-logo').style.opacity = (currentIdx > 60) ? "1" : "0";
 
+  // MODIFICATION ICI : On utilise un mode "Contain" au lieu de "Cover"
+  // L'image sera toujours affichée EN ENTIER dans le canvas.
   const canvasRatio = canvas.width / canvas.height;
   const imgRatio = img.width / img.height;
   
   let drawWidth, drawHeight;
+  
+  // Si le canvas est plus large que l'image, on adapte la hauteur
   if (canvasRatio > imgRatio) {
     drawHeight = canvas.height;
     drawWidth = canvas.height * imgRatio;
   } else {
+    // Sinon, on adapte la largeur
     drawWidth = canvas.width;
     drawHeight = canvas.width / imgRatio;
   }
 
+  // Centre l'image dans le canvas
   const offsetX = (canvas.width - drawWidth) / 2;
   const offsetY = (canvas.height - drawHeight) / 2;
   
