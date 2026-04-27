@@ -99,4 +99,131 @@
   
   <div class="glass-card" id="card1"><h2>La rencontre</h2><p>Le début d’une histoire qui ne ressemble qu’à vous.</p></div>
   <div class="glass-card" id="card2"><h2>L'envie</h2><p>L’envie de surprendre et de créer l’inoubliable.</p></div>
-  <div class="glass-card" id="card3
+  <div class="glass-card" id="card3"><h2>La demande</h2><p>Un moment suspendu où tout devient possible.</p></div>
+  <div class="glass-card" id="card4"><h2>Le stress</h2><p>Peur d’être ridicule ou de rater votre moment ? Ne laissez pas le doute s'installer.</p></div>
+  <div class="glass-card" id="card5"><h2>La solution</h2><p>Une chorégraphie sur-mesure et des cours privés pour briller avec assurance.</p></div>
+  
+  <div class="glass-card review-card" id="rev1"><p>"On n'avait jamais dansé, et pourtant on a ébloui tout le monde !"<br><strong>– Julie & Marc</strong></p></div>
+  <div class="glass-card review-card" id="rev2"><p>"Une pédagogie et une bienveillance qui changent tout. Merci Laet !"<br><strong>– Thomas & Léa</strong></p></div>
+  <div class="glass-card review-card" id="rev3"><p>"Le plus beau souvenir de notre mariage, gravé à jamais."<br><strong>– Sarah & Kev</strong></p></div>
+
+  <div class="glass-card" id="card6">
+    <div class="urgency-tag">⚠️ Période estivale : Presque complet</div>
+    <h2>L'apothéose</h2>
+    <p>Créez le souvenir dont vos invités parleront encore dans 10 ans.</p>
+    
+    <div class="cta-container">
+      <a href="https://laetsdanse.fr/contact" target="_blank" class="cta-button">Réserver mon coaching d'essai</a>
+      <a href="tel:0681178159" class="phone-link">
+        <span>📞</span> 06 81 17 81 59
+      </a>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+<script>
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+const totalFrames = 885;
+const images = [];
+const sequence = { frame: 0 };
+
+function preload() {
+  for (let i = 1; i <= totalFrames; i++) {
+    const img = new Image();
+    img.src = `./03_ASSETS/SEQUENCE_FINALE/frame_${String(i).padStart(4, '0')}.webp`;
+    images.push(img);
+    img.onload = () => {
+      const loaded = images.filter(im => im.complete).length;
+      document.getElementById('preloader-fill').style.width = (loaded / totalFrames * 100) + '%';
+      if (loaded === totalFrames) startApp();
+    };
+  }
+}
+
+function startApp() {
+  gsap.to('#preloader', { opacity: 0, duration: 1, onComplete: () => {
+    document.getElementById('preloader').style.display = 'none';
+    initScroll();
+  }});
+}
+
+function render() {
+  const currentIdx = Math.round(sequence.frame);
+  const img = images[currentIdx];
+  if (!img) return;
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const canvasRatio = canvas.width / canvas.height;
+  const imgRatio = img.width / img.height;
+  let dW, dH;
+  if (window.innerWidth >= 768) {
+    if (currentIdx < 60) { dH = canvas.height; dW = dH * imgRatio; } 
+    else {
+      if (canvasRatio > imgRatio) { dW = canvas.width; dH = dW / imgRatio; } 
+      else { dH = canvas.height; dW = dH * imgRatio; }
+    }
+  } else {
+    if (currentIdx < 60) {
+      if (canvasRatio > imgRatio) { dH = canvas.height; dW = dH * imgRatio; } 
+      else { dW = canvas.width; dH = dW / imgRatio; }
+    } else {
+      if (canvasRatio > imgRatio) { dW = canvas.width; dH = dW / imgRatio; } 
+      else { dH = canvas.height; dW = dH * imgRatio; }
+      if (dW > canvas.width * 1.5) { dW = canvas.width * 1.5; dH = dW / imgRatio; }
+    }
+  }
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.drawImage(img, (canvas.width - dW) / 2, (canvas.height - dH) / 2, dW, dH);
+  document.getElementById('brand-logo').style.opacity = (currentIdx > 60) ? "1" : "0";
+}
+
+function initScroll() {
+  gsap.registerPlugin(ScrollTrigger);
+  gsap.to(sequence, {
+    frame: totalFrames - 1,
+    ease: "none",
+    scrollTrigger: { trigger: "body", start: "top top", end: "bottom bottom", scrub: 0.1, onUpdate: render }
+  });
+
+  const timings = [
+    { id: "#card1", s: 65, e: 303 }, { id: "#card2", s: 337, e: 402 },
+    { id: "#card3", s: 420, e: 522 }, { id: "#card4", s: 539, e: 618 },
+    { id: "#card5", s: 625, e: 727 }
+  ];
+
+  timings.forEach(t => {
+    gsap.timeline({
+      scrollTrigger: {
+        trigger: "body", start: `${(t.s/totalFrames)*100}% top`, end: `${(t.e/totalFrames)*100}% top`, scrub: true,
+        onToggle: self => document.querySelector(t.id).style.pointerEvents = self.isActive ? 'auto' : 'none'
+      }
+    }).to(t.id, { opacity: 1, y: 0, duration: 0.3 }).to(t.id, { opacity: 1, duration: 0.4 }).to(t.id, { opacity: 0, y: -20, duration: 0.3 });
+  });
+
+  // APOTHÉOSE : 82%
+  gsap.timeline({
+    scrollTrigger: {
+      trigger: "body", start: "82% top", end: "100% top", scrub: true,
+      onToggle: self => document.querySelector("#card6").style.pointerEvents = self.isActive ? 'auto' : 'none'
+    }
+  }).fromTo("#card6", { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.6 });
+
+  // AVIS : 85%
+  if (window.innerWidth >= 768) {
+    const pTrigger = { trigger: "body", start: "85% top", end: "100% top", scrub: 2.2 };
+    gsap.timeline({ scrollTrigger: pTrigger }).fromTo("#rev1", { opacity: 0, y: 150, x: -50 }, { opacity: 1, y: -200, x: -150, ease: "none" });
+    gsap.timeline({ scrollTrigger: pTrigger }).fromTo("#rev2", { opacity: 0, y: -100, x: 80 }, { opacity: 1, y: 250, x: 180, ease: "none" });
+    gsap.timeline({ scrollTrigger: pTrigger }).fromTo("#rev3", { opacity: 0, y: 200, x: 40 }, { opacity: 1, y: -280, x: 100, ease: "none" });
+  }
+
+  render();
+}
+window.addEventListener('resize', render);
+preload();
+</script>
+</body>
+</html>
