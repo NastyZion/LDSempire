@@ -11,22 +11,20 @@
   #canvas-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; background: #000; overflow: hidden; }
   #canvas { display: block; width: 100%; height: 100%; }
   #brand-logo { position: absolute; top: 30px; left: 30px; width: 120px; opacity: 0; transition: opacity 1s ease; z-index: 100; }
-  #fixed-watermark { position: fixed; bottom: 40px; right: 40px; width: 90px; opacity: 0.6; z-index: 100; pointer-events: none; filter: drop-shadow(0 0 15px rgba(0,0,0,0.7)); }
+  #fixed-watermark { position: fixed; bottom: 30px; right: 30px; width: 80px; opacity: 0.6; z-index: 100; pointer-events: none; }
 
   .glass-card {
     position: absolute; background: var(--glass-bg); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
     border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 20px; padding: 2.2rem;
     text-align: center; opacity: 0; pointer-events: none; z-index: 10; width: 420px;
-    box-shadow: 0 25px 60px rgba(0,0,0,0.7);
   }
   .glass-card h2 { font-family: 'Roboto', sans-serif; font-weight: 900; text-transform: uppercase; font-size: 2rem; color: var(--neon-pink); margin-bottom: 1.2rem; }
   .glass-card p { font-family: 'Roboto', sans-serif; font-weight: 700; font-size: 1.2rem; color: #ffffff; line-height: 1.5; }
 
-  .review-card { position: absolute; width: 260px; padding: 1.5rem; z-index: 9; }
-  .review-card p { font-size: 1rem !important; line-height: 1.3; }
-  #rev1 { top: 15%; left: 8%; transform: rotate(-3deg); }
-  #rev2 { top: 18%; right: 8%; transform: rotate(4deg); }
-  #rev3 { bottom: 20%; left: 10%; transform: rotate(-2deg); }
+  .review-card { position: absolute; width: 280px; padding: 1.5rem; z-index: 9; }
+  #rev1 { top: 12%; left: 8%; transform: rotate(-2deg); }
+  #rev2 { top: 15%; right: 8%; transform: rotate(3deg); }
+  #rev3 { bottom: 15%; left: 10%; transform: rotate(-1deg); }
 
   #card6 { top: 50%; left: 50%; transform: translate(-50%, -50%); width: 480px; z-index: 15; }
   .cta-button { display: inline-block; padding: 16px 28px; background: var(--neon-pink); color: #fff; text-decoration: none; font-family: 'Roboto', sans-serif; font-weight: 900; border-radius: 50px; text-transform: uppercase; margin: 20px 0 15px 0; }
@@ -39,9 +37,9 @@
   #card5 { bottom: 12%; left: 5%; } 
 
   @media (max-width: 768px) {
-    .glass-card:not(.review-card) { width: 92% !important; left: 4% !important; bottom: 6% !important; top: auto !important; margin: 0 !important; }
+    .glass-card:not(.review-card) { width: 92% !important; left: 4% !important; bottom: 8% !important; top: auto !important; margin: 0 !important; }
     .review-card { display: none; }
-    #brand-logo { width: 90px; top: 15px; left: 15px; }
+    #brand-logo { width: 80px; top: 15px; left: 15px; }
   }
 
   #preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; }
@@ -54,7 +52,7 @@
 <div id="preloader"><div id="preloader-bar"><div id="preloader-fill"></div></div></div>
 
 <img src="./03_ASSETS/logo.png" id="brand-logo" alt="Logo">
-<img src="./03_ASSETS/LOGO_LDS/logo-lds.png" id="fixed-watermark" alt="LDS Watermark">
+<img src="./03_ASSETS/LOGO_LDS/logo-lds.png" id="fixed-watermark" alt="LDS">
 
 <div id="canvas-container">
   <canvas id="canvas"></canvas>
@@ -63,9 +61,11 @@
   <div class="glass-card" id="card3"><h2>La demande</h2><p>Un instant suspendu, une promesse.</p></div>
   <div class="glass-card" id="card4"><h2>Le stress</h2><p>Ne laissez pas le stress gâcher votre moment. On s'occupe de tout.</p></div>
   <div class="glass-card" id="card5"><h2>La solution</h2><p>Progrès rapides, intimité totale. Apprenez dans le confort d'un studio cosy.</p></div>
+  
   <div class="glass-card review-card" id="rev1"><p>"On a ébloui tout le monde !"<br><strong>– Julie & Marc</strong></p></div>
   <div class="glass-card review-card" id="rev2"><p>"Pédagogie et bienveillance au top."<br><strong>– Thomas & Léa</strong></p></div>
   <div class="glass-card review-card" id="rev3"><p>"Un souvenir gravé à jamais."<br><strong>– Sarah & Kev</strong></p></div>
+
   <div class="glass-card" id="card6">
     <h2>L'apothéose</h2>
     <p>Créez le souvenir dont vos invités parleront encore dans 10 ans.</p>
@@ -90,7 +90,7 @@ function preload() {
     img.src = `./03_ASSETS/SEQUENCE_FINALE/frame_${String(i).padStart(4, '0')}.webp`;
     images.push(img);
     img.onload = () => {
-      const loaded = images.filter(i => i.complete).length;
+      const loaded = images.filter(im => im.complete).length;
       document.getElementById('preloader-fill').style.width = (loaded / totalFrames * 100) + '%';
       if (loaded === totalFrames) startApp();
     };
@@ -115,31 +115,20 @@ function render() {
   const canvasRatio = canvas.width / canvas.height;
   const imgRatio = img.width / img.height;
   
-  let drawWidth, drawHeight;
+  let dW, dH;
 
-  // LOGIQUE DE ZOOM RADICALE : On ne dépasse jamais les bords de l'écran à la fin
-  if (currentIdx > 750) {
-    // SCENE FINALE : Mode "Contain" strict (On voit TOUTE l'image sans zoom)
-    if (canvasRatio > imgRatio) {
-      drawHeight = canvas.height;
-      drawWidth = canvas.height * imgRatio;
-    } else {
-      drawWidth = canvas.width;
-      drawHeight = canvas.width / imgRatio;
-    }
+  // LOGIQUE DE RENDU : TOUJOURS PLEIN ECRAN (COVER)
+  // Sur PC, cela crée l'effet d'élargissement naturel quand la vidéo passe en 16/9
+  if (canvasRatio > imgRatio) {
+    dW = canvas.width;
+    dH = canvas.width / imgRatio;
   } else {
-    // DEBUT : Mode "Cover" (Plein écran immersif)
-    if (canvasRatio > imgRatio) {
-      drawWidth = canvas.width;
-      drawHeight = canvas.width / imgRatio;
-    } else {
-      drawHeight = canvas.height;
-      drawWidth = canvas.height * imgRatio;
-    }
+    dH = canvas.height;
+    dW = canvas.height * imgRatio;
   }
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.drawImage(img, (canvas.width - drawWidth) / 2, (canvas.height - drawHeight) / 2, drawWidth, drawHeight);
+  ctx.drawImage(img, (canvas.width - dW) / 2, (canvas.height - dH) / 2, dW, dH);
   document.getElementById('brand-logo').style.opacity = (currentIdx > 60) ? "1" : "0";
 }
 
@@ -154,8 +143,7 @@ function initScroll() {
   const timings = [
     { id: "#card1", s: 65, e: 303 }, { id: "#card2", s: 337, e: 402 },
     { id: "#card3", s: 420, e: 522 }, { id: "#card4", s: 539, e: 618 },
-    { id: "#card5", s: 625, e: 727 }, 
-    { id: "#card6", s: 785, e: 885 },
+    { id: "#card5", s: 625, e: 727 }, { id: "#card6", s: 785, e: 885 },
     { id: "#rev1", s: 795, e: 885 }, { id: "#rev2", s: 805, e: 885 }, { id: "#rev3", s: 815, e: 885 }
   ];
 
