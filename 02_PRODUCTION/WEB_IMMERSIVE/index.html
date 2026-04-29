@@ -35,27 +35,25 @@
   #card6 { top: 50%; left: 50%; transform: translate(-50%, -50%); width: 550px; z-index: 20; padding: 3rem 2rem; }
   
   .urgency-tag { 
-    display: inline-block !important; background: #000; color: var(--neon-pink) !important; 
-    padding: 8px 18px; border-radius: 50px; font-family: 'Roboto', sans-serif;
-    font-weight: 900; font-size: 0.85rem; text-transform: uppercase; margin-bottom: 20px;
-    border: 2px solid var(--neon-pink); box-shadow: 0 0 15px rgba(255, 0, 127, 0.5);
+    display: inline-block !important; background: #000000 !important; color: var(--neon-pink) !important; 
+    padding: 8px 18px; border-radius: 50px; font-family: 'Roboto', sans-serif; font-weight: 900; 
+    font-size: 0.85rem; text-transform: uppercase; margin-bottom: 20px; border: 2px solid var(--neon-pink); 
+    box-shadow: 0 0 15px rgba(255, 0, 127, 0.5);
   }
 
   .cta-container { display: flex !important; flex-direction: column; align-items: center; gap: 20px; margin-top: 30px; }
   .cta-button { 
     display: inline-block; padding: 18px 35px; background: var(--neon-pink); color: #fff; 
-    text-decoration: none; font-family: 'Roboto', sans-serif; font-weight: 900; 
-    border-radius: 50px; text-transform: uppercase; font-size: 1rem;
-    box-shadow: 0 0 25px rgba(255, 0, 127, 0.5); transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    text-decoration: none; font-family: 'Roboto', sans-serif; font-weight: 900; border-radius: 50px; 
+    text-transform: uppercase; font-size: 1rem; box-shadow: 0 0 25px rgba(255, 0, 127, 0.5); 
+    transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
-
   .phone-link { color: #fff; text-decoration: none; font-family: 'Roboto', sans-serif; font-weight: 900; font-size: 1.3rem; display: flex !important; align-items: center; gap: 10px; }
 
   #audio-toggle {
     position: fixed; bottom: 30px; left: 30px; z-index: 1000; cursor: pointer;
-    background: rgba(0,0,0,0.7); padding: 12px; border-radius: 50%;
-    border: 1px solid var(--neon-pink); display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 0 15px rgba(255, 0, 127, 0.3); opacity: 1;
+    background: rgba(0,0,0,0.7); padding: 12px; border-radius: 50%; border: 1px solid var(--neon-pink); 
+    display: flex; align-items: center; justify-content: center; box-shadow: 0 0 15px rgba(255, 0, 127, 0.3);
   }
 
   #rev1 { top: 12%; left: 5%; transform: rotate(-3deg); }
@@ -83,9 +81,7 @@
 
 <div id="preloader"><div id="preloader-bar"><div id="preloader-fill"></div></div></div>
 
-<audio id="bg-music" loop preload="auto">
-  <source src="./03_ASSETS/marry_you.mp3" type="audio/mpeg">
-</audio>
+<audio id="bg-music" loop preload="auto"><source src="./03_ASSETS/marry_you.mp3" type="audio/mpeg"></audio>
 
 <div id="audio-toggle"><span id="audio-icon" style="font-size: 20px;">🔊</span></div>
 
@@ -94,17 +90,14 @@
 
 <div id="canvas-container">
   <canvas id="canvas"></canvas>
-  
   <div class="glass-card" id="card1"><h2>La rencontre</h2><p>Le début d’une histoire qui ne ressemble qu’à vous.</p></div>
   <div class="glass-card" id="card2"><h2>L'envie</h2><p>L’envie de surprendre et de créer l’inoubliable.</p></div>
   <div class="glass-card" id="card3"><h2>La demande</h2><p>Un moment suspendu où tout devient possible.</p></div>
   <div class="glass-card" id="card4"><h2>Le stress</h2><p>Peur d’être ridicule ou de rater votre moment ? Ne laissez pas le doute s'installer.</p></div>
   <div class="glass-card" id="card5"><h2>La solution</h2><p>Une chorégraphie sur-mesure et des cours privés pour briller avec assurance.</p></div>
-  
   <div class="glass-card review-card" id="rev1"><p>"On n'avait jamais dansé, et pourtant on a ébloui tout le monde !"<br><strong>– Julie & Marc</strong></p></div>
   <div class="glass-card review-card" id="rev2"><p>"Une pédagogie et une bienveillance qui changent tout. Merci Laet !"<br><strong>– Thomas & Léa</strong></p></div>
   <div class="glass-card review-card" id="rev3"><p>"Le plus beau souvenir de notre mariage, gravé à jamais."<br><strong>– Sarah & Kev</strong></p></div>
-
   <div class="glass-card" id="card6">
     <div class="urgency-tag">⚠️ Période estivale : Presque complet</div>
     <h2>L'apothéose</h2>
@@ -150,7 +143,7 @@ function startApp() {
   }});
 }
 
-function handleMusic() {
+function unlockAudio() {
   if (!musicStarted) {
     music.muted = false;
     music.volume = 0;
@@ -158,7 +151,10 @@ function handleMusic() {
       musicStarted = true;
       gsap.to(music, { volume: 0.3, duration: 2 });
       audioIcon.innerText = "🔊";
-    }).catch(e => console.log("Interaction requise"));
+      window.removeEventListener('scroll', unlockAudio);
+      window.removeEventListener('click', unlockAudio);
+      window.removeEventListener('touchstart', unlockAudio);
+    }).catch(e => console.log("Navigateur attend interaction"));
   }
 }
 
@@ -169,68 +165,3 @@ function render() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
   const canvasRatio = canvas.width / canvas.height;
-  const imgRatio = img.width / img.height;
-  let dW, dH;
-  if (canvasRatio > imgRatio) { dW = canvas.width; dH = dW / imgRatio; } 
-  else { dH = canvas.height; dW = dH * imgRatio; }
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.drawImage(img, (canvas.width - dW) / 2, (canvas.height - dH) / 2, dW, dH);
-  document.getElementById('brand-logo').style.opacity = (currentIdx > 60) ? "1" : "0";
-}
-
-function initScroll() {
-  gsap.registerPlugin(ScrollTrigger);
-
-  // Demarrage au scroll
-  window.addEventListener('scroll', handleMusic, { once: true });
-
-  // Reset au sommet
-  ScrollTrigger.create({
-    trigger: "body", start: "top top", end: "10px top",
-    onEnterBack: () => {
-      music.pause();
-      music.currentTime = 0;
-      musicStarted = false;
-      audioIcon.innerText = "🔇";
-    }
-  });
-
-  audioToggle.addEventListener('click', () => {
-    if(!musicStarted) { handleMusic(); return; }
-    music.muted = !music.muted;
-    audioIcon.innerText = music.muted ? "🔇" : "🔊";
-  });
-
-  gsap.to(sequence, {
-    frame: totalFrames - 1, ease: "none",
-    scrollTrigger: { trigger: "body", start: "top top", end: "bottom bottom", scrub: 0.1, onUpdate: render }
-  });
-
-  const timings = [
-    { id: "#card1", s: 65, e: 303 }, { id: "#card2", s: 337, e: 402 },
-    { id: "#card3", s: 420, e: 522 }, { id: "#card4", s: 539, e: 618 },
-    { id: "#card5", s: 625, e: 727 }
-  ];
-
-  timings.forEach(t => {
-    gsap.timeline({
-      scrollTrigger: { trigger: "body", start: `${(t.s/totalFrames)*100}% top`, end: `${(t.e/totalFrames)*100}% top`, scrub: true }
-    }).to(t.id, { opacity: 1, y: 0, duration: 0.3 }).to(t.id, { opacity: 1, duration: 0.4 }).to(t.id, { opacity: 0, y: -20, duration: 0.3 });
-  });
-
-  gsap.timeline({
-    scrollTrigger: { trigger: "body", start: "82% top", end: "100% top", scrub: true }
-  }).fromTo("#card6", { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.6 });
-
-  if (window.innerWidth >= 768) {
-    const pTrigger = { trigger: "body", start: "85% top", end: "100% top", scrub: 2.2 };
-    gsap.timeline({ scrollTrigger: pTrigger }).fromTo("#rev1", { opacity: 0, y: 150, x: -50 }, { opacity: 1, y: -200, x: -150, ease: "none" });
-    gsap.timeline({ scrollTrigger: pTrigger }).fromTo("#rev2", { opacity: 0, y: -100, x: 80 }, { opacity: 1, y: 250, x: 180, ease: "none" });
-    gsap.timeline({ scrollTrigger: pTrigger }).fromTo("#rev3", { opacity: 0, y: 200, x: 40 }, { opacity: 1, y: -280, x: 100, ease: "none" });
-  }
-  render();
-}
-preload();
-</script>
-</body>
-</html>
