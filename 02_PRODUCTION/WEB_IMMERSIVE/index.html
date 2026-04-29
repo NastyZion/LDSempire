@@ -81,9 +81,11 @@
 
 <div id="preloader"><div id="preloader-bar"><div id="preloader-fill"></div></div></div>
 
-<audio id="bg-music" loop preload="auto"><source src="./03_ASSETS/marry_you.mp3" type="audio/mpeg"></audio>
+<audio id="bg-music" loop preload="auto" muted>
+  <source src="03_ASSETS/marry_you.mp3" type="audio/mpeg">
+</audio>
 
-<div id="audio-toggle"><span id="audio-icon" style="font-size: 20px;">🔊</span></div>
+<div id="audio-toggle"><span id="audio-icon" style="font-size: 20px;">🔇</span></div>
 
 <img src="./03_ASSETS/logo.png" id="brand-logo" alt="Logo">
 <img src="./03_ASSETS/LOGO_LDS/logo_lds.png" id="fixed-watermark" alt="LDS">
@@ -145,16 +147,15 @@ function startApp() {
 
 function unlockAudio() {
   if (!musicStarted) {
-    music.muted = false;
+    music.muted = true; // On commence muet comme demandé
     music.volume = 0;
     music.play().then(() => {
       musicStarted = true;
-      gsap.to(music, { volume: 0.3, duration: 2 });
-      audioIcon.innerText = "🔊";
+      // On retire les écouteurs pour ne pas relancer la fonction
       window.removeEventListener('scroll', unlockAudio);
       window.removeEventListener('click', unlockAudio);
       window.removeEventListener('touchstart', unlockAudio);
-    }).catch(e => console.log("Navigateur attend interaction"));
+    }).catch(e => console.log("Unlock bloqué"));
   }
 }
 
@@ -165,3 +166,85 @@ function render() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
   const canvasRatio = canvas.width / canvas.height;
+  const imgRatio = img.width / img.height;
+  let dW, dH;
+  if (canvasRatio > imgRatio) { dW = canvas.width; dH = dW / imgRatio; } 
+  else { dH = canvas.height; dW = dH * imgRatio; }
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.drawImage(img, (canvas.width - dW) / 2, (canvas.height - dH) / 2, dW, dH);
+  document.getElementById('brand-logo').style.opacity = (currentIdx > 60) ? "1" : "0";
+}
+
+function initScroll() {
+  gsap.registerPlugin(ScrollTrigger);
+  
+  // Déverrouillage au premier geste
+  window.addEventListener('scroll', unlockAudio, { once: false });
+  window.addEventListener('click', unlockAudio, { once: false });
+  window.addEventListener('touchstart', unlockAudio, { once: false });
+
+  // Reset au sommet
+  ScrollTrigger.create({
+    trigger: "body", start: "top top", end: "10px top",
+    onEnterBack: () => {
+      music.pause();
+      music.currentTime = 0;
+      musicStarted = false;
+      music.muted = true;
+      audioIcon.innerText = "🔇";
+      window.addEventListener('scroll', unlockAudio, { once: false });
+    }
+  });
+
+  // GESTION DU BOUTON (Unmute avec montée progressive)
+  audioToggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if(!musicStarted) unlockAudio();
+
+    if (music.muted) {
+      music.muted = false;
+      audioIcon.innerText = "🔊";
+      // Montée douce sur 5 secondes à 0.3
+      gsap.to(music, { volume: 0.3, duration: 5, ease: "power1.inOut" });
+    } else {
+      gsap.to(music, { volume: 0, duration: 2, onComplete: () => {
+        music.muted = true;
+        audioIcon.innerText = "🔇";
+      }});
+    }
+  });
+
+  gsap.to(sequence, {
+    frame: totalFrames - 1, ease: "none",
+    scrollTrigger: { trigger: "body", start: "top top", end: "bottom bottom", scrub: 0.1, onUpdate: render }
+  });
+
+  const timings = [
+    { id: "#card1", s: 65, e: 303 }, { id: "#card2", s: 337, e: 402 },
+    { id: "#card3", s: 420, e: 522 }, { id: "#card4", s: 539, e: 618 },
+    { id: "#card5", s: 625, e: 727 }
+  ];
+
+  timings.forEach(t => {
+    gsap.timeline({
+      scrollTrigger: { trigger: "body", start: `${(t.s/totalFrames)*100}% top`, end: `${(t.e/totalFrames)*100}% top`, scrub: true }
+    }).to(t.id, { opacity: 1, y: 0, duration: 0.3 }).to(t.id, { opacity: 1, duration: 0.4 }).to(t.id, { opacity: 0, y: -20, duration: 0.3 });
+  });
+
+  gsap.timeline({
+    scrollTrigger: { trigger: "body", start: "82% top", end: "100% top", scrub: true }
+  }).fromTo("#card6", { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.6 });
+
+  if (window.innerWidth >= 768) {
+    const pTrigger = { trigger: "body", start: "85% top", end: "100% top", scrub: 2.2 };
+    gsap.timeline({ scrollTrigger: pTrigger }).fromTo("#rev1", { opacity: 0, y: 150, x: -50 }, { opacity: 1, y: -200, x: -150, ease: "none" });
+    gsap.timeline({ scrollTrigger: pTrigger }).fromTo("#rev2", { opacity: 0, y: -100, x: 80 }, { opacity: 1, y: 250, x: 180, ease: "none" });
+    gsap.timeline({ scrollTrigger: pTrigger }).fromTo("#rev3", { opacity: 0, y: 200, x: 40 }, { opacity: 1, y: -280, x: 100, ease: "none" });
+  }
+  render();
+}
+window.addEventListener('resize', render);
+preload();
+</script>
+</body>
+</html>
